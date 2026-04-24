@@ -1,11 +1,10 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
 export default function HomeScreen() {
   return (
@@ -17,63 +16,65 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+      
+      {/* 1. Header Section */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedView style={{ flex: 1 }}>
+          <ThemedText type="title">Dashboard</ThemedText>
+          <ThemedText style={styles.subHeaderText}>Welcome to Your Account!!</ThemedText>
+        </ThemedView>
         <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
+      {/* 2. Action Button (Add Transaction) */}
+      <TouchableOpacity style={styles.btnPri} activeOpacity={0.7}>
+        <ThemedText style={styles.btnText}>+ Add Transaction</ThemedText>
+      </TouchableOpacity>
+
+      {/* 3. Cards Section (The Grid Replacement) */}
+      <View style={styles.cardsContainer}>
+        <View style={styles.card}>
+          <ThemedText style={styles.cardTitle}>Total Balance</ThemedText>
+          <ThemedText style={styles.value}>Rs. 5,240</ThemedText>
+          <ThemedText style={{fontSize: 10, color: '#1b7e2c'}}>Safe spending</ThemedText>
+        </View>
+
+        <View style={styles.card}>
+          <ThemedText style={styles.cardTitle}>Income</ThemedText>
+          <ThemedText style={[styles.value, styles.positive]}>Rs. 2,100</ThemedText>
+          <ThemedText style={{fontSize: 10, color: 'gray'}}>Current Total</ThemedText>
+        </View>
+
+        <View style={styles.card}>
+          <ThemedText style={styles.cardTitle}>Expenses</ThemedText>
+          <ThemedText style={[styles.value, styles.negative]}>Rs. 850</ThemedText>
+          <ThemedText style={{fontSize: 10, color: 'gray'}}>Current Total</ThemedText>
+        </View>
+      </View>
+
+      {/* 4. Recent Transactions Section (Table Replacement) */}
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+        <ThemedText type="subtitle">Recent Transactions</ThemedText>
+        
+        {/* Transaction Row 1 */}
+        <View style={styles.tableRow}>
+          <View>
+            <ThemedText type="defaultSemiBold">Food & Dining</ThemedText>
+            <ThemedText style={{fontSize: 12, color: 'gray'}}>Apr 24, 2026</ThemedText>
+          </View>
+          <ThemedText style={styles.negative}>- Rs. 450</ThemedText>
+        </View>
+
+        {/* Transaction Row 2 */}
+        <View style={styles.tableRow}>
+          <View>
+            <ThemedText type="defaultSemiBold">Salary</ThemedText>
+            <ThemedText style={{fontSize: 12, color: 'gray'}}>Apr 23, 2026</ThemedText>
+          </View>
+          <ThemedText style={styles.positive}>+ Rs. 2,000</ThemedText>
+        </View>
       </ThemedView>
+
     </ParallaxScrollView>
   );
 }
@@ -83,10 +84,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginBottom: 10,
+  },
+  subHeaderText: {
+    fontSize: 16,
+    color: '#6b7280',
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 20,
+    padding: 15,
+    borderRadius: 12,
+    backgroundColor: 'rgba(128, 128, 128, 0.05)',
   },
   reactLogo: {
     height: 178,
@@ -95,4 +104,53 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
+  // Finance App Custom Styles
+  btnPri: {
+    backgroundColor: 'navy',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  btnText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  cardsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 20,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(128, 128, 128, 0.15)',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+  },
+  cardTitle: {
+    fontSize: 11,
+    color: '#666',
+  },
+  value: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginVertical: 4,
+  },
+  positive: { color: '#1b7e2c' },
+  negative: { color: '#c62828' },
+  tableRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#ccc',
+  }
 });
