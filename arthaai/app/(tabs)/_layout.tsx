@@ -45,13 +45,29 @@ export default function TabLayout() {
         }}
       />
 
+      {/* ADDED budget TAB */}
       <Tabs.Screen
-        name="explore"
+        name="budget"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <Ionicons size={24} name="compass" color={color} />,
+          title: 'Budget',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="wallet" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="utilities"
+        options={{
+          title: 'Utilities',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="construct" color={color} />,
+        }}
+      />
+        <Tabs.Screen
+        name="review"
+        options={{
+          title: 'Review',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="document-text" color={color} />,
         }}
       />
     </Tabs>
   );
 }
+//Funnel

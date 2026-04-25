@@ -1,11 +1,18 @@
-import React from 'react'; // Only declare this once at the top
-import { StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import React from 'react'; 
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function BudgetScreen() {
   const insets = useSafeAreaInsets();
+
+  // Mock data for categories based on your screenshots
+  const categories = [
+    { name: 'Food & Dining', spent: 11000, limit: 10000, over: true },
+    { name: 'Groceries', spent: 2300, limit: 10000, over: false },
+    { name: 'Utilities', spent: 1900, limit: 1000, over: true },
+  ];
 
   return (
     <ScrollView 
@@ -48,6 +55,41 @@ export default function BudgetScreen() {
         </View>
         <ThemedText style={styles.percentageText}>79.0%</ThemedText>
       </View>
+
+      {/* Budget Categories Section */}
+      <View style={styles.sectionHeader}>
+        <ThemedText style={styles.sectionTitle}>Budget Categories</ThemedText>
+        <TouchableOpacity style={styles.blueAddButton}>
+          <ThemedText style={styles.addButtonText}>+ Add Category</ThemedText>
+        </TouchableOpacity>
+      </View>
+
+      {categories.map((cat, index) => (
+        <View key={index} style={[styles.categoryCard, cat.over && styles.overBudgetCard]}>
+          <View style={styles.categoryInfo}>
+            <View style={styles.categoryTitleRow}>
+              <ThemedText style={styles.categoryName}>{cat.name}</ThemedText>
+              <ThemedText style={[styles.categoryAmount, { color: cat.over ? '#ef4444' : '#22c55e' }]}>
+                {cat.over ? `Rs. -${cat.spent - cat.limit}` : `Rs. ${cat.limit - cat.spent}`}
+              </ThemedText>
+            </View>
+            <ThemedText style={styles.categorySubText}>
+              Rs. {cat.spent}.00 of Rs. {cat.limit}.00 spent
+            </ThemedText>
+            <View style={styles.categoryProgressContainer}>
+              <View style={[
+                styles.categoryProgressBar, 
+                { width: `${Math.min((cat.spent / cat.limit) * 100, 100)}%`, 
+                  backgroundColor: cat.over ? '#ef4444' : '#22c55e' }
+              ]} />
+            </View>
+          </View>
+          <View style={styles.categoryActions}>
+             <TouchableOpacity><Ionicons name="create-outline" size={18} color="#718096" /></TouchableOpacity>
+             <TouchableOpacity><Ionicons name="trash-outline" size={18} color="#718096" /></TouchableOpacity>
+          </View>
+        </View>
+      ))}
 
       {/* Money Flow Tracker Section */}
       <View style={styles.sectionHeader}>
@@ -94,7 +136,29 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, marginTop: 10 },
   sectionTitle: { fontSize: 16, fontWeight: 'bold', color: 'black' },
   blueAddButton: { backgroundColor: '#000080', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 6 },
-  addButtonText: { color: 'white', fontSize: 12, fontWeight: 'bold' },
+  addButtonText: { color: 'white', fontSize:12, fontWeight: 'bold'},
+  
+  // Category specific styles
+  categoryCard: { 
+    flexDirection: 'row', 
+    backgroundColor: 'white', 
+    padding: 15, 
+    borderRadius: 12, 
+    marginBottom: 10, 
+    borderWidth: 1, 
+    borderColor: '#edf2f7',
+    alignItems: 'center'
+  },
+  overBudgetCard: { backgroundColor: '#fff5f5', borderColor: '#feb2b2' },
+  categoryInfo: { flex: 1 },
+  categoryTitleRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
+  categoryName: { fontSize: 14, fontWeight: 'bold', color: 'black' },
+  categoryAmount: { fontSize: 14, fontWeight: 'bold' },
+  categorySubText: { fontSize: 11, color: '#718096' },
+  categoryProgressContainer: { height: 6, backgroundColor: '#edf2f7', borderRadius: 3, marginTop: 10 },
+  categoryProgressBar: { height: '100%', borderRadius: 3 },
+  categoryActions: { flexDirection: 'row', gap: 10, marginLeft: 15 },
+
   flowRow: { flexDirection: 'row', gap: 10 },
   flowCard: { flex: 1, backgroundColor: 'white', padding: 15, borderRadius: 12, borderWidth: 1, borderColor: '#edf2f7' },
   flowLabel: { fontSize: 12, fontWeight: 'bold' },
