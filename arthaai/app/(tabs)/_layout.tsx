@@ -3,9 +3,8 @@ import React from 'react';
 import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { Colors } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Ionicons } from '@expo/vector-icons'; // Added for the stats-chart icon
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -13,13 +12,11 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        // Using Navy Blue for active tab to match your dashboard
         tabBarActiveTintColor: '#000080', 
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
             backgroundColor: 'white',
           },
@@ -28,6 +25,7 @@ export default function TabLayout() {
           },
         }),
       }}>
+      
       <Tabs.Screen
         name="index"
         options={{
@@ -36,7 +34,6 @@ export default function TabLayout() {
         }}
       />
       
-      {/* ADDED ANALYTICS TAB */}
       <Tabs.Screen
         name="analytics"
         options={{
@@ -45,7 +42,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* ADDED budget TAB */}
       <Tabs.Screen
         name="budget"
         options={{
@@ -53,6 +49,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons size={24} name="wallet" color={color} />,
         }}
       />
+
       <Tabs.Screen
         name="utilities"
         options={{
@@ -60,22 +57,38 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons size={24} name="construct" color={color} />,
         }}
       />
-        <Tabs.Screen
+
+      <Tabs.Screen
         name="review"
         options={{
           title: 'Review',
           tabBarIcon: ({ color }) => <Ionicons size={24} name="document-text" color={color} />,
         }}
       />
+
       <Tabs.Screen
         name="goal"
         options={{
           title: 'Goal',
-          tabBarIcon: ({ color }) => <Ionicons size={24} name="compass-outline" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="disc-outline" color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="help"
+        options={{
+          title: 'Help',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="help-circle-outline" color={color} />,
+        }}
+      />
+
+      {/* THIS IS THE FIX: Explicitly hiding the explore tab if the file exists */}
+      <Tabs.Screen
+        name="explore"
+        options={{
+          href: null,
         }}
       />
     </Tabs>
-    
   );
 }
-//Funnel,compass-outline
