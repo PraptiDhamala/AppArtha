@@ -67,7 +67,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons size={24} name="document-text" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="goal"
+        options={{
+          title: 'Goal',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="compass-outline" color={color} />,
+        }}
+      />
     </Tabs>
+    
   );
 }
-//Funnel
+//Funnel,compass-outline

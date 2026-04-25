@@ -31,16 +31,15 @@ const GoalsPage = () => {
           </View>
 
           {/* Header */}
-          <View style={styles.header}>
-            <View>
-              <Text style={styles.title}>Financial Goals</Text>
-              <Text style={styles.subtitle}>Track and achieve your savings targets</Text>
-            </View>
-            <TouchableOpacity style={styles.addBtn}>
-              <Text style={styles.addBtnText}>+ Add Goal</Text>
-            </TouchableOpacity>
-          </View>
-
+<View>
+  <View style={styles.titleRow}>
+    <Ionicons name="compass-outline" size={26} color="#0f172a" />
+    <Text style={styles.title}>Financial Goals</Text>
+  </View>
+  <Text style={styles.subtitle}>
+    Track and achieve your savings targets
+  </Text>
+</View>
           {/* Stats */}
           <View style={styles.statsRow}>
             <StatBox title="Total Goals" value="3" />
@@ -299,7 +298,11 @@ const styles = StyleSheet.create({
     borderRadius: 8, 
     alignItems: 'center' 
   },
-
+titleRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 10
+},
   contribText: { fontSize: 11, fontWeight: 'bold', color: '#64748b' }
 });
 
