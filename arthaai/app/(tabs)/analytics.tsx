@@ -29,11 +29,11 @@ export default function AnalyticsScreen() {
 
   // Updated Pie Data (Solid sections, no donut)
   const pieData = [
-    { value: 45, color: '#000080', label: 'Food & Dining' },
+     { value: 45, color: 'navy', label: 'Food & Dining' },
     { value: 15, color: '#0ea5e9', label: 'Groceries' },
-    { value: 15, color: '#854d0e', label: 'Utilities' },
-    { value: 15, color: '#064e3b', label: 'Housing' },
-    { value: 10, color: '#450a0a', label: 'Transport' },
+    { value: 15, color: '#3b82f6', label: 'Utilities' },
+    { value: 15, color: '#0284c7', label: 'Housing' },
+    { value: 10, color: '#7dd3fc', label: 'Transport' },
   ];
 
   const renderLegend = (text, color) => {

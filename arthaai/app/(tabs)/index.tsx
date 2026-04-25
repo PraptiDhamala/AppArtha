@@ -1,12 +1,32 @@
+import React from 'react';
 import { StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { PieChart } from "react-native-gifted-charts"; // Added to match Analytics
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+
+  // Data synced from Analytics Screen
+  const pieData = [
+    { value: 45, color: 'navy', label: 'Food & Dining' },
+    { value: 15, color: '#0ea5e9', label: 'Groceries' },
+    { value: 15, color: '#3b82f6', label: 'Utilities' },
+    { value: 15, color: '#0284c7', label: 'Housing' },
+    { value: 10, color: '#7dd3fc', label: 'Transport' },
+  ];
+
+  const renderLegend = (text, color) => {
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 4 }}>
+        <div style={{ height: 10, width: 10, borderRadius: 2, backgroundColor: color, marginRight: 4 }} />
+        <ThemedText style={{ fontSize: 10, color: '#4b5563' }}>{text}</ThemedText>
+      </View>
+    );
+  };
 
   return (
     <ScrollView 
@@ -25,7 +45,6 @@ export default function HomeScreen() {
       {/* 2. Dashboard Title & Add Button */}
       <View style={styles.headerRow}>
         <View>
-          {/* Added Home Icon in front of Dashboard */}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Ionicons name="home" size={22} color="black" />
             <ThemedText style={styles.dashboardTitle}>Dashboard</ThemedText>
@@ -37,8 +56,8 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* 3. Top Balance Cards - Updated to use cardsContainer */}
-      <View style={styles.cardsContainer}>
+      {/* 3. Summary Cards Grid - Styled to match Analytics */}
+      <View style={styles.cardsRow}>
         <View style={styles.card}>
           <ThemedText style={styles.cardLabel}>Total Balance</ThemedText>
           <ThemedText style={styles.cardValue}>Rs. 1228518.00</ThemedText>
@@ -56,21 +75,33 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Chart ra Quick Stats Section */}
+      {/* 4. Chart & Quick Stats Section */}
       <View style={styles.statsGrid}>
-        <View style={[styles.card, { flex: 1.5 }]}>
-          <ThemedText style={styles.sectionTitle}>Expenses by Category</ThemedText>
-          <ThemedText style={styles.subHeaderText}>Breakdown of your spending</ThemedText>
-          <View style={styles.pieContainer}>
-             <View style={styles.pieCirclePlaceholder}>
-                <View style={[styles.pieSlice, { backgroundColor: '#1e3a8a', transform: [{ rotate: '100deg' }] }]} />
-                <View style={[styles.pieSlice, { backgroundColor: '#3b82f6', transform: [{ rotate: '200deg' }] }]} />
-                <View style={[styles.pieSlice, { backgroundColor: '#93c5fd', transform: [{ rotate: '350deg' }] }]} />
-                <View style={[styles.pieSlice, { backgroundColor: '#93c5fd', transform: [{ rotate: '270deg' }] }]} />
-             </View>
-          </View>
+      {/* Expenses by Category Card */}
+<View style={[styles.card, { flex: 1, minHeight: 350 }]}> {/* Added minHeight to prevent clipping */}
+  <ThemedText style={styles.sectionTitle}>Expenses by Category</ThemedText>
+  <ThemedText style={styles.subHeaderText}>Breakdown of your spending</ThemedText>
+  
+  <View style={styles.pieWrapper}>
+    <PieChart
+      data={pieData}
+      radius={75}
+      textSize={12}
+    />
+    
+    {/* 2. Enhanced Legend Container */}
+    <View style={styles.legendWrapper}>
+      {pieData.map((item, index) => (
+        <View key={index} style={styles.legendRow}>
+          <View style={[styles.legendDot, { backgroundColor: item.color }]} />
+          <ThemedText style={styles.legendText}>{item.label}</ThemedText>
         </View>
+      ))}
+    </View>
+  </View>
+</View>
 
+        {/* Quick Stats Card */}
         <View style={[styles.card, { flex: 1 }]}>
           <ThemedText style={styles.sectionTitle}>Quick Stats</ThemedText>
           <ThemedText style={styles.subHeaderText}>This month's overview</ThemedText>
@@ -80,8 +111,8 @@ export default function HomeScreen() {
           </View>
           <View style={styles.progressBar}><View style={styles.progressFill} /></View>
           <View style={styles.statLine}>
-            <ThemedText style={styles.statLabel}>Transactions</ThemedText>
-            <ThemedText style={styles.statValue}>67</ThemedText>
+            <ThemedText style={styles.statLabel}>Total Transactions</ThemedText>
+            <ThemedText style={styles.statValue}>49</ThemedText>
           </View>
           <View style={styles.statLine}>
             <ThemedText style={styles.statLabel}>Avg Expense</ThemedText>
@@ -90,18 +121,16 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Scan Receipt */}
+      {/* 5. Scan Receipt Section */}
       <View style={styles.scanBanner}>
-        <View style={styles.scanTextContainer}>
-          <ThemedText style={styles.scanTitle}>Scan Receipt</ThemedText>
-          <ThemedText style={styles.scanSub}>Upload a receipt to automatically extract details</ThemedText>
-        </View>
+        <ThemedText style={styles.scanTitle}>Scan Receipt</ThemedText>
+        <ThemedText style={styles.scanSub}>Upload a receipt to automatically extract details</ThemedText>
         <TouchableOpacity style={styles.scanButton}>
           <ThemedText style={styles.scanButtonText}>Start Receipt Scanner</ThemedText>
         </TouchableOpacity>
       </View>
 
-      {/* Recent Transactions */}
+      {/* 6. Recent Transactions Table */}
       <View style={styles.tableContainer}>
         <ThemedText style={styles.sectionTitle}>Recent Transactions</ThemedText>
         <View style={styles.tableHeader}>
@@ -119,7 +148,6 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </View>
-
     </ScrollView>
   );
 }
@@ -134,29 +162,24 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   dashboardTitle: { fontSize: 22, fontWeight: 'bold', color: 'black' },
   subHeaderText: { fontSize: 12, color: '#718096' },
-  addBtnSmall: { backgroundColor: '#000080', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 6 },
+  addBtnSmall: { backgroundColor: '#000080', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 6 },
   addBtnText: { color: 'white', fontSize: 12, fontWeight: '600' },
   
-  // THREE CARDS IN A ROW
-  cardsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 8,
-    marginBottom: 15,
-  },
+  // Adjusted Cards to match Analytics Styling
+  cardsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 15 },
   card: { 
     backgroundColor: 'white', 
-    padding: 10, 
+    padding: 15, 
     borderRadius: 12, 
     borderWidth: 1, 
     borderColor: '#edf2f7',
-    flex: 1, // This allows the 3 cards to share the width equally
+    flex: 1,        
+    minWidth: '45%',  
   },
-  cardLabel: { fontSize: 10, color: '#4a5568' },
-  cardValue: { fontSize: 13, fontWeight: 'bold', marginVertical: 4, color: 'black' },
-  cardHint: { fontSize: 9, color: '#a0aec0' },
+  cardLabel: { fontSize: 11, color: '#4a5568' },
+  cardValue: { fontSize: 16, fontWeight: 'bold', marginVertical: 4, color: 'black' },
+  cardHint: { fontSize: 10, color: '#a0aec0' },
   
-  // Stats Grid
   statsGrid: { flexDirection: 'column', gap: 10, marginBottom: 15 },
   sectionTitle: { fontSize: 14, fontWeight: 'bold', color: 'black' },
   statLine: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
@@ -165,22 +188,42 @@ const styles = StyleSheet.create({
   progressBar: { height: 6, backgroundColor: '#edf2f7', borderRadius: 3, marginTop: 5 },
   progressFill: { width: '70%', height: '100%', backgroundColor: '#48bb78', borderRadius: 3 },
   
-  // Pie chart
-  pieContainer: { height: 180, alignItems: 'center', justifyContent: 'center', marginTop: 20 },
-  pieCirclePlaceholder: { 
-    width: 120, height: 120, borderRadius: 60, backgroundColor: '#f0f4f8', overflow: 'hidden',
-    borderWidth: 8, borderColor: '#edf2f7', justifyContent: 'center', alignItems: 'center'
+  // Real Pie Chart Styling
+pieWrapper: { 
+    marginTop: 15, 
+    alignItems: 'center',
+    width: '100%', 
   },
-  pieSlice: { position: 'absolute', width: 60, height: 120, left: 60, borderTopRightRadius: 60, borderBottomRightRadius: 60 },
-
-  // Scanner
+  legendWrapper: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', // CRITICAL: This allows legends to move to the next line instead of hiding
+    justifyContent: 'center', 
+    marginTop: 20, 
+    gap: 12,
+    width: '100%',
+    paddingBottom: 10 // Ensures space at the bottom of the card
+  },
+  legendRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center',
+  },
+  legendDot: { 
+    height: 10, 
+    width: 10, 
+    borderRadius: 2, 
+    marginRight: 6 
+  },
+  legendText: { 
+    fontSize: 10, 
+    color: '#4b5563', 
+    fontWeight: '500' 
+  },
   scanBanner: { backgroundColor: 'white', padding: 15, borderRadius: 12, borderWidth: 1, borderColor: '#edf2f7', marginBottom: 15 },
   scanTitle: { fontSize: 14, fontWeight: 'bold', color: 'black' },
   scanSub: { fontSize: 11, color: '#718096', marginBottom: 10 },
-  scanButton: { backgroundColor: '#10b981', padding: 10, borderRadius: 8, alignItems: 'center' },
+  scanButton: { backgroundColor: '#10b981', padding: 12, borderRadius: 8, alignItems: 'center' },
   scanButtonText: { color: 'white', fontWeight: 'bold', fontSize: 13 },
 
-  // Table
   tableContainer: { backgroundColor: 'white', padding: 15, borderRadius: 12, borderWidth: 1, borderColor: '#edf2f7' },
   tableHeader: { flexDirection: 'row', backgroundColor: '#f7fafc', padding: 8, marginTop: 10, borderRadius: 4 },
   tableHeadText: { fontSize: 10, fontWeight: 'bold', color: '#718096' },
