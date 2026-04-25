@@ -174,18 +174,61 @@ export default function ReviewScreen() {
               <Text style={styles.aiBannerText}>AI Financial Insights - Powered by intelligent analysis</Text>
             </View>
 
-            <View style={styles.insightsGrid}>
-              <View style={[styles.insightCard, { borderColor: '#e0e7ff' }]}>
-                <Text style={styles.insightLabel}>Monthly Spending Forecast</Text>
-                <Text style={styles.insightValue}>₹21704.4</Text>
-                <Text style={styles.insightSub}>Projected total for this month</Text>
-              </View>
-              <View style={[styles.insightCard, { borderColor: '#dcfce7' }]}>
-                <Text style={styles.insightLabel}>Spending Trend: Stable</Text>
-                <Text style={styles.insightValue}>0%</Text>
-                <Text style={styles.insightSub}>Change compared to earlier transactions</Text>
-              </View>
-            </View>
+           <View style={styles.insightsGrid}>
+
+  {/* Prediction Card */}
+  <View style={[
+    styles.insightCard, 
+    { borderColor: '#c7d2fe', backgroundColor: '#eef2ff' }
+  ]}>
+    <View style={{
+      position: 'absolute',
+      top: 8,
+      right: 10,
+      backgroundColor: '#e0e7ff',
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      borderRadius: 6
+    }}>
+      <Text style={{ fontSize: 9, color: '#4338ca', fontWeight: '700' }}>
+        Prediction
+      </Text>
+    </View>
+
+    <Text style={styles.insightLabel}>Monthly Spending Forecast</Text>
+    <Text style={styles.insightValue}>₹21704.4</Text>
+    <Text style={styles.insightSub}>
+      Based on your current spending pattern
+    </Text>
+  </View>
+
+  {/* Trend Card */}
+  <View style={[
+    styles.insightCard, 
+    { borderColor: '#bbf7d0', backgroundColor: '#f0fdf4' }
+  ]}>
+    <View style={{
+      position: 'absolute',
+      top: 8,
+      right: 10,
+      backgroundColor: '#dcfce7',
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      borderRadius: 6
+    }}>
+      <Text style={{ fontSize: 9, color: '#16a34a', fontWeight: '700' }}>
+        Trend
+      </Text>
+    </View>
+
+    <Text style={styles.insightLabel}>Spending Trend: Stable</Text>
+    <Text style={styles.insightValue}>0%</Text>
+    <Text style={styles.insightSub}>
+      No major changes compared to earlier transactions
+    </Text>
+  </View>
+
+</View>
 
             <View style={styles.recommendationBox}>
               <Text style={styles.sectionTitle}>Personalized Recommendations</Text>
